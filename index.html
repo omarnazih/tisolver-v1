@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      /* Add CSS styles for posts */
+      #posts-container > div {
+        border: 1px solid #ccc;
+        padding: 20px;
+        margin-bottom: 20px;
+      }
+
+      #posts-container h2 {
+        font-size: 24px;
+        margin-bottom: 10px;
+      }
+
+      #posts-container p {
+        font-size: 16px;
+        color: #888;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="posts-container"></div>
+    <script type="module">
+      import {createClient} from 'https://esm.sh/@sanity/client'
+
+      const client = createClient({
+        projectId: '1iv23tih',
+        dataset: 'production',
+        useCdn: true, // set to `false` to bypass the edge cache
+        apiVersion: '2023-05-03', // use current date (YYYY-MM-DD) to target the latest API version
+        // token: process.env.SANITY_SECRET_TOKEN // Only if you want to update content with the client
+      })
+
+      async function getAllPosts() {
+        try {
+          const posts = await client.fetch(`
+            *[_type == "post"]
+            | order(publishedAt desc)
+            {
+              _id,
+              title,
+              slug,
+              author->{name},
+              mainImage { asset->{url, altText} },
+              categories[]->{title},
+              publishedAt,
+              body
+            }
+          `)
+          return posts
+        } catch (error) {
+          console.error('Error fetching posts:', error)
+          throw error
+        }
+      }
+
+      function displayPosts() {
+        getAllPosts()
+          .then((posts) => {
+            const postsContainer = document.getElementById('posts-container')
+
+            posts.forEach((post) => {
+              const postDiv = document.createElement('div')
+              const date = new Date(post.publishedAt)
+
+              postDiv.classList.add('post')
+
+              postDiv.innerHTML = `
+                <h2>${post.title}</h2>
+                <p>${date.toLocaleDateString('en-US', {
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric',
+                })}</p>
+                <img src="${post.mainImage.asset.url}" alt="${post.mainImage.altText}" />
+                <p>Author: ${post.author.name}</p>
+                <p>Categories: ${post.categories.map((category) => category.title).join(', ')}</p>
+                <div>${post.body}</div>
+                <!-- You can add more content here as needed -->
+              `
+
+              postsContainer.appendChild(postDiv)
+            })
+          })
+          .catch((error) => {
+            console.error('Error:', error)
+          })
+      }
+
+      // Call the displayPosts function to display the posts
+      displayPosts()
+
+      // FOR PORTABLE TEXT IN SANITY https://github.com/portabletext/to-html
+    </script>
+  </body>
+</html>
