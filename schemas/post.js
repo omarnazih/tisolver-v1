@@ -2,13 +2,14 @@ import {defineField, defineType} from 'sanity'
 
 export default defineType({
   name: 'post',
-  title: 'Post',
+  title: 'Blog Post',
   type: 'document',
   fields: [
     defineField({
       name: 'title',
       title: 'Title',
       type: 'string',
+      validation: (Rule) => Rule.max(45).warning(`A title shouldn't be more than 45 characters.`),
     }),
     defineField({
       name: 'slug',
@@ -16,7 +17,7 @@ export default defineType({
       type: 'slug',
       options: {
         source: 'title',
-        maxLength: 96,
+        maxLength: 45,
       },
     }),
     defineField({

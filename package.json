@@ -15,7 +15,9 @@
     "sanity"
   ],
   "dependencies": {
+    "@sanity/client": "^6.4.12",
     "@sanity/vision": "^3.16.7",
+    "express": "^4.18.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-is": "^18.2.0",
@@ -35,5 +37,8 @@
     "printWidth": 100,
     "bracketSpacing": false,
     "singleQuote": true
-  }
+  },
+  "description": "Congratulations, you have now installed the Sanity Content Studio, an open source real-time content editing environment connected to the Sanity backend.",
+  "author": "",
+  "type": "module"
 }
