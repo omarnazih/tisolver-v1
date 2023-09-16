@@ -46,7 +46,7 @@
               title,
               slug,
               author->{name},
-              mainImage { asset->{url, altText} },
+              "mainImage": mainImage.asset->url,              
               categories[]->{title},
               publishedAt,
               body
@@ -77,7 +77,7 @@
                   month: 'long',
                   day: 'numeric',
                 })}</p>
-                <img src="${post.mainImage.asset.url}" alt="${post.mainImage.altText}" />
+                <img src="${post.mainImage}" alt="${post.title}" />
                 <p>Author: ${post.author.name}</p>
                 <p>Categories: ${post.categories.map((category) => category.title).join(', ')}</p>
                 <div>${post.body}</div>
