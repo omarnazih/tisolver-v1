@@ -43,15 +43,7 @@ export default defineType({
     defineField({
       name: 'description',
       title: 'Project Description',
-      type: 'array',
-      of: [
-        {
-          title: 'Block',
-          type: 'block',
-          styles: [{title: 'Normal', value: 'normal'}],
-          lists: [],
-        },
-      ],
+      type: 'text',
     }),
     defineField({
       name: 'projectImages',
